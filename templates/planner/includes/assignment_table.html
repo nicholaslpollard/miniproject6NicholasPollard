@@ -1,0 +1,56 @@
+{# Table of assignments with status badges and actions. Expects: assignments, optional hide_course. #}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">Title</th>
+            {% if not hide_course %}<th scope="col">Course</th>{% endif %}
+            <th scope="col">Due date</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for assignment in assignments %}
+            <tr>
+                <td>
+                    <span class="fw-semibold{% if assignment.is_completed %} text-decoration-line-through text-muted{% endif %}">{{ assignment.title }}</span>
+                    {% if assignment.description %}
+                        <div class="small text-muted">{{ assignment.description|truncatechars:90 }}</div>
+                    {% endif %}
+                </td>
+                {% if not hide_course %}
+                    <td><a href="{% url 'planner:course_detail' assignment.course.pk %}">{{ assignment.course.code }}</a></td>
+                {% endif %}
+                <td class="text-nowrap">{{ assignment.due_date|date:"M j, Y" }}</td>
+                <td>
+                    {% if assignment.is_completed %}
+                        <span class="badge text-bg-success">Completed</span>
+                    {% elif assignment.is_overdue %}
+                        <span class="badge text-bg-danger">Overdue</span>
+                    {% else %}
+                        <span class="badge text-bg-warning">Pending</span>
+                    {% endif %}
+                </td>
+                <td class="text-end text-nowrap">
+                    <form method="post" action="{% url 'planner:assignment_toggle' assignment.pk %}" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        {% if assignment.is_completed %}
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Mark incomplete</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-sm btn-outline-success">Mark complete</button>
+                        {% endif %}
+                    </form>
+                    <a class="btn btn-sm btn-outline-primary"
+                       href="{% url 'planner:assignment_update' assignment.pk %}?next={{ request.get_full_path|urlencode }}">Edit</a>
+                    <button type="button" class="btn btn-sm btn-outline-danger"
+                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                            data-delete-url="{% url 'planner:assignment_delete' assignment.pk %}"
+                            data-item-name="{{ assignment.title }}">Delete</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

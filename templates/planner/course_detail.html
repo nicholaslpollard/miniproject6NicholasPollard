@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.code }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'planner:course_list' %}">My Courses</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ course.code }}</li>
+    </ol>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+    <div>
+        <span class="badge text-bg-primary">{{ course.code }}</span>
+        <h1 class="mt-1 mb-0">{{ course.name }}</h1>
+    </div>
+    <div>
+        <a class="btn btn-outline-primary" href="{% url 'planner:course_update' course.pk %}">Edit course</a>
+        <button type="button" class="btn btn-outline-danger"
+                data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                data-delete-url="{% url 'planner:course_delete' course.pk %}"
+                data-item-name="{{ course }}"
+                data-warning="Deleting this course will also permanently delete its {{ assignments|length }} assignment{{ assignments|length|pluralize }}.">
+            Delete course
+        </button>
+    </div>
+</div>
+
+{% if course.description %}
+    <p class="lead">{{ course.description|linebreaksbr }}</p>
+{% endif %}
+
+<div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+    <h2 class="h4 mb-0">Assignments</h2>
+    <a class="btn btn-primary btn-sm" href="{% url 'planner:assignment_create' %}?course={{ course.pk }}&amp;next={{ request.get_full_path|urlencode }}">Add assignment</a>
+</div>
+
+{% if assignments %}
+    {% include 'planner/includes/assignment_table.html' with hide_course=True %}
+{% else %}
+    <p class="text-muted">No assignments for this course yet.</p>
+{% endif %}
+{% endblock %}

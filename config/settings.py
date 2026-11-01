@@ -134,3 +134,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication redirects (URL pattern names)
+
+LOGIN_URL = 'planner:login'
+LOGIN_REDIRECT_URL = 'planner:dashboard'
+LOGOUT_REDIRECT_URL = 'planner:home'

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Features{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Features</h1>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h5">Personal dashboard</h2>
+                <p class="card-text">See totals for completed, pending, and overdue assignments, plus what is coming up next.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h5">Course management</h2>
+                <p class="card-text">Add, edit, and remove courses. Each course code is unique within your account.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h5">Assignment tracking</h2>
+                <p class="card-text">Record assignments with descriptions and due dates, linked to one of your courses.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h5">One-click completion</h2>
+                <p class="card-text">Mark assignments complete or incomplete directly from any list.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h5">Filters</h2>
+                <p class="card-text">View all, pending, completed, or overdue assignments with a single click.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h5">Private and secure</h2>
+                <p class="card-text">Your courses and assignments are visible only to you after you log in.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

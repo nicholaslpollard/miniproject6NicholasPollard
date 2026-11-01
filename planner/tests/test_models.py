@@ -77,6 +77,17 @@ class CourseModelTests(TestCase):
         other.save()
         self.assertEqual(Course.objects.filter(code='INF601').count(), 2)
 
+    def test_code_is_normalized_to_uppercase_on_save(self):
+        course = Course.objects.create(owner=self.alice, code='  inf601 ', name='Advanced Python')
+        course.refresh_from_db()
+        self.assertEqual(course.code, 'INF601')
+
+    def test_lowercase_duplicate_code_fails_validation(self):
+        Course.objects.create(owner=self.alice, code='INF601', name='Advanced Python')
+        duplicate = Course(owner=self.alice, code='inf601', name='Duplicate')
+        with self.assertRaises(ValidationError):
+            duplicate.full_clean()
+
     def test_default_ordering_by_code(self):
         Course.objects.create(owner=self.alice, code='MATH101', name='Algebra')
         Course.objects.create(owner=self.alice, code='CS101', name='Intro')

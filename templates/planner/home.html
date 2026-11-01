@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home | Study Planner{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
 <div class="p-5 mb-4 bg-body-tertiary rounded-3">
@@ -8,5 +8,26 @@
     <p class="col-md-8 fs-5">
         Keep track of your courses, assignments, and deadlines in one place.
     </p>
+    {% if user.is_authenticated %}
+        <a class="btn btn-primary btn-lg" href="{% url 'planner:dashboard' %}">Go to your dashboard</a>
+    {% else %}
+        <a class="btn btn-primary btn-lg me-2" href="{% url 'planner:register' %}">Create a free account</a>
+        <a class="btn btn-outline-primary btn-lg" href="{% url 'planner:login' %}">Log in</a>
+    {% endif %}
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <h2 class="h5">Organize courses</h2>
+        <p class="text-muted">Add each class you are taking with its course code and a short description.</p>
+    </div>
+    <div class="col-md-4">
+        <h2 class="h5">Track assignments</h2>
+        <p class="text-muted">Record due dates and mark work complete as you finish it.</p>
+    </div>
+    <div class="col-md-4">
+        <h2 class="h5">Never miss a deadline</h2>
+        <p class="text-muted">Your dashboard highlights upcoming and overdue work at a glance.</p>
+    </div>
 </div>
 {% endblock %}

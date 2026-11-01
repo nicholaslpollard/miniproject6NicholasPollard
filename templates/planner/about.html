@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="mb-3">About Study Planner</h1>
+        <p class="lead">
+            Study Planner is a simple tool that helps students keep their coursework organized.
+        </p>
+        <p>
+            Juggling several classes makes it easy to lose track of what is due and when. Study Planner
+            gives every student a private space to list their courses, record assignments with due dates,
+            and check off work as it is completed.
+        </p>
+
+        <h2 class="h4 mt-4">Your data stays private</h2>
+        <p>
+            Each account can only see and change its own courses and assignments. Passwords are stored
+            using Django's built-in password hashing, and every form is protected against cross-site
+            request forgery.
+        </p>
+
+        <h2 class="h4 mt-4">About the project</h2>
+        <p class="mb-0">
+            Study Planner was built by Nicholas Pollard for INF601 &ndash; Advanced Programming in Python
+            (Mini Project 6) using Django and Bootstrap.
+        </p>
+    </div>
+</div>
+{% endblock %}

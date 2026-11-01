@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if course %}Edit {{ course.code }}{% else %}Add course{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="mb-4">{% if course %}Edit course{% else %}Add a course{% endif %}</h1>
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% include 'planner/includes/form_fields.html' %}
+                    <button type="submit" class="btn btn-primary">{% if course %}Save changes{% else %}Add course{% endif %}</button>
+                    <a class="btn btn-link" href="{% if course %}{% url 'planner:course_detail' course.pk %}{% else %}{% url 'planner:course_list' %}{% endif %}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

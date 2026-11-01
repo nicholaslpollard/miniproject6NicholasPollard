@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <h1 class="mb-0">Welcome, {{ user.username }}</h1>
+    <div>
+        <a class="btn btn-primary" href="{% url 'planner:assignment_create' %}">Add assignment</a>
+        <a class="btn btn-outline-primary" href="{% url 'planner:course_create' %}">Add course</a>
+    </div>
+</div>
+
+<div class="row row-cols-2 row-cols-lg-4 g-3 mb-4">
+    <div class="col">
+        <a class="card stat-card text-decoration-none h-100" href="{% url 'planner:assignment_list' %}">
+            <div class="card-body">
+                <div class="text-muted small">Total assignments</div>
+                <div class="display-6 fw-semibold" data-stat="total">{{ total_count }}</div>
+            </div>
+        </a>
+    </div>
+    <div class="col">
+        <a class="card stat-card border-success text-decoration-none h-100" href="{% url 'planner:assignment_list' %}?filter=completed">
+            <div class="card-body">
+                <div class="text-success small">Completed</div>
+                <div class="display-6 fw-semibold" data-stat="completed">{{ completed_count }}</div>
+            </div>
+        </a>
+    </div>
+    <div class="col">
+        <a class="card stat-card border-warning text-decoration-none h-100" href="{% url 'planner:assignment_list' %}?filter=pending">
+            <div class="card-body">
+                <div class="text-warning-emphasis small">Incomplete</div>
+                <div class="display-6 fw-semibold" data-stat="pending">{{ pending_count }}</div>
+            </div>
+        </a>
+    </div>
+    <div class="col">
+        <a class="card stat-card border-danger text-decoration-none h-100" href="{% url 'planner:assignment_list' %}?filter=overdue">
+            <div class="card-body">
+                <div class="text-danger small">Overdue</div>
+                <div class="display-6 fw-semibold" data-stat="overdue">{{ overdue_count }}</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        {% if overdue_assignments %}
+            <div class="card border-danger mb-4">
+                <div class="card-header bg-danger-subtle"><h2 class="h5 mb-0">Overdue</h2></div>
+                <div class="card-body p-0">
+                    {% include 'planner/includes/assignment_table.html' with assignments=overdue_assignments %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-header"><h2 class="h5 mb-0">Upcoming assignments</h2></div>
+            <div class="card-body{% if upcoming_assignments %} p-0{% endif %}">
+                {% if upcoming_assignments %}
+                    {% include 'planner/includes/assignment_table.html' with assignments=upcoming_assignments %}
+                {% else %}
+                    <p class="text-muted mb-0">Nothing upcoming. Enjoy the break, or
+                        <a href="{% url 'planner:assignment_create' %}">add an assignment</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0">My courses</h2>
+                <a class="small" href="{% url 'planner:course_list' %}">View all</a>
+            </div>
+            {% if courses %}
+                <ul class="list-group list-group-flush">
+                    {% for course in courses %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'planner:course_detail' course.pk %}">{{ course.code }} &ndash; {{ course.name }}</a>
+                            <span class="badge text-bg-secondary rounded-pill"
+                                  title="Pending / total">{{ course.pending_count }} / {{ course.assignment_count }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="card-body">
+                    <p class="text-muted mb-0">You have not added any courses yet.
+                        <a href="{% url 'planner:course_create' %}">Add your first course</a>.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

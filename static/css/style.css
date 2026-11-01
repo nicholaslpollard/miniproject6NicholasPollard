@@ -3,3 +3,20 @@
 .navbar-brand {
     font-weight: 600;
 }
+
+/* Dashboard statistic cards are links; keep their text readable and add a subtle hover. */
+.stat-card {
+    color: inherit;
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+}
+
+.stat-card:hover,
+.stat-card:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+}
+
+.table td .btn + .btn,
+.table td form + .btn {
+    margin-left: 0.25rem;
+}

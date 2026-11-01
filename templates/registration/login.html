@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-sm-10 col-md-7 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-3">Log in</h1>
+                <form method="post" action="{% url 'planner:login' %}" novalidate>
+                    {% csrf_token %}
+                    {% include 'planner/includes/form_fields.html' %}
+                    {# Django's LoginView only follows "next" if it points to this site. #}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <button type="submit" class="btn btn-primary w-100">Log in</button>
+                </form>
+                <p class="mt-3 mb-0 text-center">
+                    Need an account? <a href="{% url 'planner:register' %}">Register</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

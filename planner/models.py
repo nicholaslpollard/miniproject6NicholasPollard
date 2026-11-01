@@ -5,6 +5,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 
 
 class Course(models.Model):
@@ -40,8 +41,14 @@ class Course(models.Model):
             return False
         return self.assignments.exclude(owner_id=self.owner_id).exists()
 
+    def normalize_code(self):
+        """Store course codes in a consistent uppercase form, e.g. 'inf 601 ' -> 'INF 601'."""
+        if self.code:
+            self.code = self.code.strip().upper()
+
     def clean(self):
         super().clean()
+        self.normalize_code()
         # Changing a course's owner would leave its assignments owned by someone else.
         if self.has_mismatched_assignments():
             raise ValidationError({
@@ -54,6 +61,7 @@ class Course(models.Model):
         if self.has_mismatched_assignments():
             raise ValidationError('A course cannot be saved while it has assignments '
                                   'belonging to another user.')
+        self.normalize_code()
         super().save(*args, **kwargs)
 
 
@@ -82,6 +90,11 @@ class Assignment(models.Model):
 
     def __str__(self):
         return f'{self.title} (due {self.due_date})'
+
+    @property
+    def is_overdue(self):
+        """An incomplete assignment whose due date is before today (in the site's time zone)."""
+        return not self.is_completed and self.due_date < timezone.localdate()
 
     def clean(self):
         super().clean()

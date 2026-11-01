@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if assignment %}Edit assignment{% else %}Add assignment{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h1 class="mb-4">{% if assignment %}Edit assignment{% else %}Add an assignment{% endif %}</h1>
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% include 'planner/includes/form_fields.html' %}
+                    {# Where to return afterwards; the view only follows it if it is on this site. #}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    <button type="submit" class="btn btn-primary">{% if assignment %}Save changes{% else %}Add assignment{% endif %}</button>
+                    <a class="btn btn-link" href="{% url 'planner:assignment_list' %}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
