@@ -93,12 +93,6 @@
     {% block content %}{% endblock %}
 </main>
 
-<footer class="bg-light py-3 mt-auto">
-    <div class="container text-center text-muted small">
-        INF601 Mini Project 6 &mdash; Study Planner
-    </div>
-</footer>
-
 {% if user.is_authenticated %}
     {% include 'planner/includes/delete_modal.html' %}
 {% endif %}
