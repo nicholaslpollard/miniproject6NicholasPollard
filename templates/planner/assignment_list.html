@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block title %}My Assignments{% endblock %}
@@ -13,16 +14,45 @@
         <li class="nav-item">
             <a class="nav-link{% if key == selected_filter %} active{% endif %}"
                {% if key == selected_filter %}aria-current="page"{% endif %}
-               href="{% url 'planner:assignment_list' %}{% if key != 'all' %}?filter={{ key }}{% endif %}">{{ label }}</a>
+               href="{% url 'planner:assignment_list' %}?filter={{ key }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}">{{ label }}</a>
         </li>
     {% endfor %}
 </ul>
+
+<!-- Assignment search -->
+<form method="get" action="{% url 'planner:assignment_list' %}" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <label for="assignment-search" class="form-label">Search assignments</label>
+        <input type="search"
+               id="assignment-search"
+               name="q"
+               class="form-control"
+               placeholder="Search by title, description, or course"
+               value="{{ search_query }}"
+               maxlength="100">
+    </div>
+
+    <input type="hidden" name="filter" value="{{ selected_filter }}">
+
+    <div class="col-md-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+
+    {% if search_query %}
+        <div class="col-md-auto align-self-end">
+            <a href="{% url 'planner:assignment_list' %}?filter={{ selected_filter }}"
+               class="btn btn-outline-secondary">Clear</a>
+        </div>
+    {% endif %}
+</form>
 
 {% if assignments %}
     {% include 'planner/includes/assignment_table.html' %}
 {% else %}
     <div class="text-center py-5 border rounded-3 bg-body-tertiary">
-        {% if selected_filter == 'pending' %}
+        {% if search_query %}
+            <p class="lead mb-0">No assignments match your search.</p>
+        {% elif selected_filter == 'pending' %}
             <p class="lead mb-0">No pending assignments. Nice work!</p>
         {% elif selected_filter == 'completed' %}
             <p class="lead mb-0">No completed assignments yet.</p>

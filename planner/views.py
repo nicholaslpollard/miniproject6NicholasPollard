@@ -1,3 +1,4 @@
+
 # INF601 - Advanced Programming in Python
 # Nicholas Pollard
 # Mini Project 6
@@ -173,6 +174,9 @@ def assignment_list(request):
     if selected not in ASSIGNMENT_FILTERS:
         selected = 'all'
 
+    # Search assignments using a trimmed, length-limited query.
+    search_query = request.GET.get('q', '').strip()[:100]
+
     today = timezone.localdate()
     assignments = Assignment.objects.filter(owner=request.user).select_related('course')
     if selected == 'pending':
@@ -182,10 +186,20 @@ def assignment_list(request):
     elif selected == 'overdue':
         assignments = assignments.filter(is_completed=False, due_date__lt=today)
 
+    # Search only within the current user's filtered assignments.
+    if search_query:
+        assignments = assignments.filter(
+            Q(title__icontains=search_query)
+            | Q(description__icontains=search_query)
+            | Q(course__name__icontains=search_query)
+            | Q(course__code__icontains=search_query)
+        )
+
     return render(request, 'planner/assignment_list.html', {
         'assignments': assignments,
         'filters': ASSIGNMENT_FILTERS,
         'selected_filter': selected,
+        'search_query': search_query,
     })
 
 
